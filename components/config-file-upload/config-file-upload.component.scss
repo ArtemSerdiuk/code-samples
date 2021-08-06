@@ -1,0 +1,25 @@
+@import 'abstracts/variables';
+@import 'abstracts/breakpoints';
+
+.config-file-upload {
+  &__subtitle {
+    font-size: var(--font-size-h5);
+    font-weight: 600;
+  }
+
+  &__delete-file-btn {
+    color: $burnt-sienna;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__validation-error-block {
+    max-width: 410px;
+  }
+
+  &__error-info {
+    color: $burnt-sienna;
+  }
+}

@@ -1,0 +1,81 @@
+<div class="shipping-address-dialog">
+  <tq-backdrop-loader *ngIf="isGetStaticDataProcess"></tq-backdrop-loader>
+  <button class="tq-icon-button shipping-address-dialog__close-button" (click)="closeDialog()" aria-label="Clear">
+    <span class="d-flex justify-content-center">
+      <i class="icon-x-1" aria-hidden="true"></i>
+    </span>
+  </button>
+  <h3 class="shipping-address-dialog__title text-center">Shipping Address</h3>
+  <ng-container *ngIf="!isGetStaticDataProcess">
+    <form novalidate (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div class="shipping-address-dialog__shipping-form-row">
+        <div class="mb-4">
+          <div class="shipping-address-dialog__row">
+            <mat-form-field class="form-field tq-form-field">
+              <mat-label>Zip</mat-label>
+              <input matInput placeholder="Type code" [formControl]="zipCodeFormControl"/>
+
+              <mat-error *ngIf="zipCodeFormControl.hasError(ValidationErrorType.required)">
+                {{ validationErrorMessages.required }}
+              </mat-error>
+              <mat-error *ngIf="zipCodeFormControl.hasError(ValidationErrorType.minlength)">
+                {{ validationErrorMessages.minlength(zipCodeFormControl.errors?.minlength?.requiredLength) }}
+              </mat-error>
+              <mat-error *ngIf="zipCodeFormControl.hasError(ValidationErrorType.maxlength)">
+                {{ validationErrorMessages.maxlength(zipCodeFormControl.errors?.maxlength?.requiredLength) }}
+              </mat-error>
+              <mat-error *ngIf="zipCodeFormControl.hasError(ValidationErrorType.trimError)">
+                {{ zipCodeFormControl.errors.trimError.value }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="form-field tq-form-field">
+              <mat-label>Country</mat-label>
+              <tq-country-autocomplete-input
+                [formControl]="countryFormControl"
+                [allItems]="staticData.countries"
+              ></tq-country-autocomplete-input>
+
+              <mat-error *ngIf="countryFormControl.hasError(ValidationErrorType.required)">
+                {{ validationErrorMessages.required }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field class="form-field tq-form-field">
+            <mat-label>City</mat-label>
+            <input matInput placeholder="Type the city..." [formControl]="cityFormControl" />
+
+            <mat-error *ngIf="cityFormControl.hasError(ValidationErrorType.required)">
+              {{ validationErrorMessages.required }}
+            </mat-error>
+            <mat-error *ngIf="cityFormControl.hasError(ValidationErrorType.maxlength)">
+              {{ validationErrorMessages.maxlength(cityFormControl.errors?.maxlength?.requiredLength) }}
+            </mat-error>
+            <mat-error *ngIf="cityFormControl.hasError(ValidationErrorType.trimError)">
+              {{ cityFormControl.errors.trimError.value }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="form-field tq-form-field">
+            <mat-label>Street, unit, house</mat-label>
+            <input matInput placeholder="Type here..." [formControl]="streetFormControl" />
+
+            <mat-error *ngIf="streetFormControl.hasError(ValidationErrorType.required)">
+              {{ validationErrorMessages.required }}
+            </mat-error>
+            <mat-error *ngIf="streetFormControl.hasError(ValidationErrorType.maxlength)">
+              {{ validationErrorMessages.maxlength(streetFormControl.errors?.maxlength?.requiredLength) }}
+            </mat-error>
+            <mat-error *ngIf="streetFormControl.hasError(ValidationErrorType.trimError)">
+              {{ streetFormControl.errors.trimError.value }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="tq-flat-primary-button">Save Address</button>
+      </div>
+    </form>
+  </ng-container>
+</div>

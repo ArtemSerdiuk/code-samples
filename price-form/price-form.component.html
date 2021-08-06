@@ -1,0 +1,88 @@
+<div class="price-form">
+  <div [formGroup]="group" *ngFor="let group of formArray.controls; trackBy: trackByFn; let index = index; let last = last">
+    <div class="price-form__wrapper d-flex align-items-center">
+      <div class="price-form__form-wrapper d-flex align-items-center full-width">
+        <mat-form-field *ngIf="group.get('title') as titleControl" class="price-form__form-field tq-form-field">
+          <input matInput [placeholder]="setPlaceholder(index)" [formControl]="titleControl" required />
+          <mat-error *ngIf="titleControl.hasError(ValidationErrorType.required)">
+            {{ validationErrorMessages.required }}
+          </mat-error>
+          <mat-error *ngIf="titleControl.hasError(ValidationErrorType.maxlength)">
+            {{ validationErrorMessages.maxlength(titleControl.errors?.maxlength?.requiredLength) }}
+          </mat-error>
+          <mat-error *ngIf="titleControl.hasError(ValidationErrorType.trimError)">
+            {{ titleControl.errors.trimError.value }}
+          </mat-error>
+        </mat-form-field>
+
+        <span class="d-flex justify-content-center full-width ml-5 mr-5">from</span>
+
+        <mat-form-field *ngIf="group.get('start') as startControl" class="form-field tq-form-field consultant-list-filter-range-block__field">
+          <input matInput [formControl]="startControl">
+        </mat-form-field>
+
+        <span class="d-flex justify-content-center full-width ml-5 mr-5">to</span>
+
+        <div>
+          <mat-form-field
+            *ngIf="group.get('end') as endControl"
+            class="form-field tq-form-field price-form__field">
+            <input matInput placeholder="above" [formControl]="endControl" (keypress)="numberOnlyDecimals($event)">
+            <mat-error *ngIf="endControl.hasError(ValidationErrorType.required)">
+              {{ validationErrorMessages.required }}
+            </mat-error>
+            <mat-error *ngIf="endControl.hasError(ValidationErrorType.max)">
+              {{ validationErrorMessages.max(endControl.errors?.max?.max) }}
+            </mat-error>
+            <mat-error *ngIf="endControl.hasError(ValidationErrorType.pattern)">
+              {{ validationErrorMessages.wrongFloatNumber }}
+            </mat-error>
+          </mat-form-field>
+          <mat-error class="price-form__error" *ngIf="isError && last && isLastPriceRangeEndFieldFull">This field should be empty.</mat-error>
+        </div>
+
+        <span class="d-flex justify-content-center full-width ml-5 mr-5">price</span>
+
+        <mat-form-field *ngIf="group.get('amount') as amountControl" class="form-field tq-form-field">
+          <span class="price-form__prefix" matPrefix [class.disabled]="disabled">{{ prefix }}</span>
+          <input inputmode="numeric"
+                 aria-label="Price"
+                 matInput
+                 placeholder="20"
+                 [formControl]="amountControl"
+                 required />
+          <mat-error *ngIf="amountControl.hasError(ValidationErrorType.required)">
+            {{ validationErrorMessages.required }}
+          </mat-error>
+          <mat-error *ngIf="amountControl.hasError(ValidationErrorType.max)">
+            {{ validationErrorMessages.max(amountControl.errors?.max?.max) }}
+          </mat-error>
+          <mat-error *ngIf="amountControl.hasError(ValidationErrorType.wrongFloatNumber)">
+            {{ validationErrorMessages.wrongFloatNumber }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="price-form__remove-btn-wrap">
+        <button
+          *ngIf="formArray.controls.length > 1 && last"
+          type="button"
+          class="tq-button pl-0 pr-0 ml-3"
+          (click)="removeLastPriceRange(index)">
+        <span class="d-flex align-items-center text-warning">
+          <i class="icon-ic-delete-forever-24px-1 price-form__icon" aria-hidden="true"></i>
+        </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="d-flex full-width">
+      <button *ngIf="isShownAddPriceRange(index) && last && !isLastControlHasMaxProductQuantity(index)" type="button" class="tq-button pl-0 pr-0" (click)="addPriceRange(index)">
+       <span class="d-flex align-items-center">
+         <i class="icon-plus-1 d-flex mr-2" aria-hidden="true"></i>
+         Add one more price range
+       </span>
+      </button>
+    </div>
+  </div>
+</div>

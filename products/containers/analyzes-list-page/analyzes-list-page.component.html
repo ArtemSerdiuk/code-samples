@@ -1,0 +1,29 @@
+<div class="analyzes-list-page"
+     infinite-scroll
+     [infiniteScrollDistance]="infiniteScrollOptions.scrollDistance"
+     [infiniteScrollThrottle]="infiniteScrollOptions.scrollThrottle"
+     [infiniteScrollDisabled]="dataSource.disabledLoading$ | async"
+     [fromRoot]="infiniteScrollOptions.fromRoot"
+     [infiniteScrollContainer]="infiniteScrollOptions.infiniteScrollContainer"
+     [scrollWindow]="infiniteScrollOptions.scrollWindow"
+     (scrolled)="onScrollDown()">
+  <div class="analyzes-list-page__title mb-5">Analyzes</div>
+
+  <ng-container *ngIf="(dataSource.status$ | async) !== 'init'; else backdropLoaderTemplate">
+    <tq-product-item
+      class="analyzes-list-page__product-item"
+      [product]="analyze"
+      (addCartEvent)="addCartItemToStorage($event)"
+      *ngFor="let analyze of (dataSource.data$ | async); trackBy: trackByFn">
+    </tq-product-item>
+  </ng-container>
+
+  <footer class="analyzes-list-page__footer pb-4">
+    <div>If you have any questions,</div>
+    <div>please contact: <a class="tq-link" href="mailto:order@tigerq.com">order@tigerq.com</a></div>
+  </footer>
+</div>
+
+<ng-template #backdropLoaderTemplate>
+  <tq-backdrop-loader></tq-backdrop-loader>
+</ng-template>

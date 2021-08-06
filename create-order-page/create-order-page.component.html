@@ -1,0 +1,104 @@
+<div class="create-order-page">
+  <mat-horizontal-stepper [linear]="isLinear" #stepper (selectionChange)="onSelectionStepperChange($event)">
+    <mat-step [stepControl]="firstStepChooseCustomerFormControl">
+      <tq-backdrop-loader *ngIf="!isLoadedCustomers"></tq-backdrop-loader>
+      <ng-template matStepLabel>Choose customer</ng-template>
+      <div *ngIf="isLoadedCustomers" class="pl-3 pr-3">
+        <mat-form-field class="form-field tq-form-field">
+          <mat-label>Customers</mat-label>
+          <tq-customer-autocomplete-input
+            [customers]="customers"
+            [formControl]="firstStepChooseCustomerFormControl">
+          </tq-customer-autocomplete-input>
+          <mat-error *ngIf="firstStepChooseCustomerFormControl.hasError('required')">
+            {{ validationErrorMessages.required }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <ng-container *ngIf="firstStepChooseCustomerFormControl.valid">
+        <button class="tq-flat-primary-button" matStepperNext>
+          <span class="d-flex align-items-center">
+            Next
+            <i class="icon-arrow-right-1 ml-2" aria-hidden="true"></i>
+          </span>
+        </button>
+      </ng-container>
+    </mat-step>
+    <mat-step [stepControl]="secondStepChooseProducts">
+      <ng-template matStepLabel>Select products</ng-template>
+      <tq-add-products>
+        <ng-container *ngIf="secondStepChooseProducts.valid">
+          <button class="tq-flat-primary-button" matStepperNext>
+            <span class="d-flex align-items-center">
+              Next
+              <i class="icon-arrow-right-1 ml-2" aria-hidden="true"></i>
+            </span>
+          </button>
+        </ng-container>
+      </tq-add-products>
+    </mat-step>
+    <mat-step [stepControl]="thirdStepCheckIsConfigFileRequired">
+      <ng-template matStepLabel>Config file</ng-template>
+      <ng-container *ngIf="isOneOfProductsHasInformationRequired && isLoadedProductsFromServer">
+        <tq-config-file (configFileIsUploaded)="configFileIsUploaded($event)"></tq-config-file>
+        <ng-container *ngIf="thirdStepCheckIsConfigFileRequired.valid">
+          <button class="tq-flat-primary-button" matStepperNext>
+            <span class="d-flex align-items-center">
+              Next
+              <i class="icon-arrow-right-1 ml-2" aria-hidden="true"></i>
+            </span>
+          </button>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!isOneOfProductsHasInformationRequired && isLoadedProductsFromServer">
+        <ng-container *ngIf="thirdStepCheckIsConfigFileRequired.valid">
+          <h5>No need to upload config file</h5>
+          <button class="tq-flat-primary-button" matStepperNext>
+            <span class="d-flex align-items-center">
+              Next
+              <i class="icon-arrow-right-1 ml-2" aria-hidden="true"></i>
+            </span>
+          </button>
+        </ng-container>
+      </ng-container>
+    </mat-step>
+    <mat-step [stepControl]="fourthStepCheckShippingAddressIsRequired">
+      <ng-template matStepLabel>Shipping Address</ng-template>
+      <ng-container *ngIf="isShippingAddressRequired && isLoadedProductsFromServer">
+        <tq-add-shipping-address [shippingData]="shippingAddressData" (saveShippingFormInfo)="saveShippingFormInfo($event)">
+          <ng-container *ngIf="fourthStepCheckShippingAddressIsRequired.valid">
+            <button class="tq-flat-primary-button" matStepperNext>
+            <span class="d-flex align-items-center">
+              Next
+              <i class="icon-arrow-right-1 ml-2" aria-hidden="true"></i>
+            </span>
+            </button>
+          </ng-container>
+        </tq-add-shipping-address>
+      </ng-container>
+      <ng-container *ngIf="!isShippingAddressRequired && isLoadedProductsFromServer">
+        <ng-container *ngIf="fourthStepCheckShippingAddressIsRequired.valid">
+          <h5>No need to add shipping address</h5>
+          <button class="tq-flat-primary-button" matStepperNext>
+            <span class="d-flex align-items-center">
+              Next
+              <i class="icon-arrow-right-1 ml-2" aria-hidden="true"></i>
+            </span>
+          </button>
+        </ng-container>
+      </ng-container>
+    </mat-step>
+    <mat-step [stepControl]="fifthStepBillingInfoAndPay">
+      <ng-template matStepLabel>Billing Info</ng-template>
+      <ng-container *ngIf="selectedCustomer && fourthStepCheckShippingAddressIsRequired.valid">
+        <tq-billing-info
+          [selectedCustomer]="fourthStepCheckShippingAddressIsRequired.valid ? selectedCustomer : null"
+          (isBillingInfoSuccessfullyUpdated)="isBillingInfoSuccessfullyUpdated($event)">
+          <ng-container *ngIf="fifthStepBillingInfoAndPay.valid">
+            <button class="tq-flat-primary-button" (click)="checkIsOrderPriceChanges()" [disabled]="isInOrderCreatingProcess">Create Order</button>
+          </ng-container>
+        </tq-billing-info>
+      </ng-container>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

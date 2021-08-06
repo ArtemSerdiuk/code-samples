@@ -1,0 +1,24 @@
+@import 'abstracts/variables';
+@import 'abstracts/breakpoints';
+
+.analyzes-list-page {
+  min-height: 100vh;
+
+  &__title {
+    font-size: var(--font-size-h3);
+    font-weight: 600;
+
+    @include media-breakpoint-down(md) {
+      font-size: var(--font-size-h4);
+    }
+  }
+
+  &__footer {
+    background-color: $white;
+    bottom: 0;
+    color: $midnight-400;
+    line-height: 2rem;
+    margin-top: auto;
+    position: sticky;
+  }
+}

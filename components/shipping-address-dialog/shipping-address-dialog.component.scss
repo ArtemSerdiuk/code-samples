@@ -1,0 +1,37 @@
+@import 'abstracts/placeholders';
+@import 'abstracts/breakpoints';
+
+.shipping-address-dialog {
+  max-height: 150vh;
+  max-width: 120vw;
+  padding: 3rem;
+  position: relative;
+  width: 380px;
+
+  &__close-button {
+    @extend %close-dialog-button;
+  }
+
+  &__title {
+    @include media-breakpoint-down(md) {
+      font-size: var(--font-size-h5);
+    }
+  }
+
+  &__subtitle {
+    font-size: var(--font-size-h5);
+    font-weight: 600;
+  }
+
+  &__row {
+    $gap: 15px;
+    column-gap: $gap;
+
+    display: grid;
+    grid-template-columns: 30% calc(70% - #{$gap});
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: auto;
+    }
+  }
+}

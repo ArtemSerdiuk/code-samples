@@ -1,0 +1,52 @@
+<div class="login-page d-flex justify-content-center align-items-center">
+  <tq-auth-card class="login-page__card">
+    <div class="login-page__form-wrap full-height d-flex flex-column">
+      <h1 class="login-page__title">Login</h1>
+      <form
+        class="login-page__form pt-4 d-flex flex-column justify-content-between"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        novalidate
+      >
+        <div>
+          <mat-form-field class="form-field tq-form-field">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput placeholder="Type email here..." formControlName="email" />
+            <mat-error id="required-email-error" *ngIf="emailFormControl.hasError('required')">
+              Please type email
+            </mat-error>
+            <mat-error id="invalid-email-error" *ngIf="emailFormControl.hasError('email')">
+              {{ validationErrorMessages.email }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="form-field tq-form-field">
+            <mat-label>Password</mat-label>
+            <input type="password" matInput formControlName="password" tqBulletsInPlaceholder autocomplete="on" />
+            <mat-error *ngIf="passwordFormControl.hasError('required')"> Please type password </mat-error>
+          </mat-form-field>
+
+          <ng-container *ngTemplateOutlet="forgotPasswordHelperTemplate"></ng-container>
+        </div>
+
+        <div class="login-page__actions mt-5">
+          <div class="d-flex justify-content-center mb-4">
+            <button id="submit-button" class="tq-flat-primary-button">Login</button>
+          </div>
+          <span
+            *ngFor="let error of errors.non_field_errors"
+            class="d-flex justify-content-center text-error text-reduced"
+            >{{ error }}</span
+          >
+        </div>
+      </form>
+    </div>
+  </tq-auth-card>
+</div>
+
+<ng-template #forgotPasswordHelperTemplate>
+  <div class="login-page__helper-text text-reduced d-flex">
+    <span class="text-base mr-3"> Forgot password? </span>
+    <a id="forgot-password-link" class="tq-link" routerLink="/auth/forgot-password">Send me reset password link.</a>
+  </div>
+</ng-template>

@@ -1,0 +1,32 @@
+<div class="cart-pay-panel">
+  <div class="cart-pay-panel__container d-flex align-items-center justify-content-between full-width pl-5 pr-6 mb-3">
+    <div>
+      <h5 class="cart-pay-panel__price-title">Total: {{prefix}} {{ totalCartPrice }}</h5>
+    </div>
+
+    <ng-container *ngIf="isUserAuthenticated; else noUserAuthActionsTemplate">
+      <ng-container *ngIf="isInformationRequired && !isCheckoutFileProcess; else payActions">
+        <button class="tq-flat-primary-button" (click)="checkoutFile()">Checkout</button>
+      </ng-container>
+      <ng-template #payActions>
+        <div class="cart-pay-panel__pay-btn d-flex">
+          <button class="tq-flat-primary-button mr-4" (click)="payByCard()" [disabled]="isPayButtonsDisabled">Pay now</button>
+          <button class="tq-flat-primary-button" (click)="payByInvoice()" [disabled]="isPayButtonsDisabled">Pay by invoice</button>
+        </div>
+      </ng-template>
+    </ng-container>
+
+  </div>
+  <div class="cart-pay-panel__footer pb-4">
+    <div>If you have any questions,</div>
+    <div>please contact: <a class="tq-link" href="mailto:order@tigerq.com">order@tigerq.com</a></div>
+  </div>
+</div>
+
+<ng-template #noUserAuthActionsTemplate>
+  <span class="cart-pay-panel__no-auth-user-text">Please <a class="tq-link"
+                                                            routerLink="/auth/login"
+                                                            [queryParams]="{returnUrl: '/cart/list'}">login</a> or
+    <a class="tq-link" routerLink="/auth/register">register</a> to continue
+  </span>
+</ng-template>

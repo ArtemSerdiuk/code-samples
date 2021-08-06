@@ -1,0 +1,17 @@
+@import 'abstracts/breakpoints';
+
+.login-page {
+  min-height: 100%;
+
+  &__title {
+    @include media-breakpoint-down(xs) {
+      font-size: var(--font-size-h3);
+    }
+  }
+
+  &__form {
+    @include media-breakpoint-down(xs) {
+      height: 100%;
+    }
+  }
+}

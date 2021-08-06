@@ -1,0 +1,47 @@
+<div class="config-file-upload">
+  <tq-backdrop-loader *ngIf="!isConfigFileLoaded"></tq-backdrop-loader>
+  <div class="config-file-upload__wrapper" *ngIf="isConfigFileLoaded">
+    <h5 class="config-file-upload__subtitle mb-5">To make a payment, you need to fill in the config file and upload it</h5>
+    <div class="mt-4 mb-4">
+      Your template of config file: {{ configFileDownload }}  <a class="tq-link" (click)="downloadConfigFile()">Download</a>
+    </div>
+
+    <div class="mb-6">
+      <div class="config-file-upload__subtitle mb-4">Config file upload</div>
+      <tq-user-files-upload-wrap (filesUploadProcess)="onUserFilesUploadProcess($event)"
+                                 (uploadedFileWhileSessionChange)="validateUploadConfigFile($event)"
+                                 (errorsChange)="onUserFilesErrorsChange($event)"
+                                 [disabled]="isConfigFilesUploadProcess || !!uploadedUserFiles"
+                                 [maxLength]="1"
+                                 [accept]="accept"
+                                 [multiple]="false"
+                                 [uploadId]="1"
+                                 [isConfig]="isConfig"
+      >
+        <button class="tq-flat-primary-button" [disabled]="isConfigFilesUploadProcess || !!uploadedUserFiles">{{isConfigFilesUploadProcess ? 'Upload process...': 'Upload file'}}</button>
+      </tq-user-files-upload-wrap>
+      <ng-container *ngIf="uploadFilesErrors.messages.length">
+        <p class="text-error" *ngFor="let error of uploadFilesErrors.messages">
+          {{error}}
+        </p>
+      </ng-container>
+      <ng-container *ngIf="uploadedConfigFile">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            Uploaded File: {{uploadedConfigFile.path | filenameFromPath}}&nbsp;&nbsp;<a class="tq-link" [routerLink]="['/download-file', uploadedConfigFile.id]" target="_blank">Download</a>
+          </div>
+          <button mat-icon-button type="button" class="config-file-upload__delete-file-btn" (click)="onRemoveConfigFile()">
+            <i class="icon-ic-delete-forever-24px-1 action-menu__icon" aria-hidden="true"></i>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="errors">
+        <div class="config-file-upload__validation-error-block d-flex justify-content-between align-items-center">
+          <div class="config-file-upload__error-info">Uploaded file did not pass validation</div>
+          <button class="tq-button" (click)="showValidationErrorsDetail()">Show detail</button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
